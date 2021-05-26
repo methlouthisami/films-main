@@ -1,5 +1,5 @@
 import "./App.css"
-import firebase from "./firebase"
+
 import Foote from "./footer";
 import React, { useState, useEffect } from "react";
 import Favor from './favories'
