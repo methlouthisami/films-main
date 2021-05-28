@@ -31,7 +31,7 @@ class PostForm extends Component {
     submitHandler = e => {
         e.preventDefault()
         console.log("hhhh", this.state)
-        axios.post(' http://localhost:3004/posts', this.state)
+        axios.post(' https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json', this.state.inpuut)
             .then(response => {
                 console.log(response)
 
@@ -42,10 +42,10 @@ class PostForm extends Component {
     }
 
     getData = () => {
-        axios.get('http://localhost:3004/posts')
+        axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
             .then((response) => {
 console.log("axios.get")
-                this.setState({ inpuut: response.data })
+                this.setState({ inpuut: Object.values(response.data) })
             })
             .catch((err) => console.log('erreurrr', this.inpuut))
     }
@@ -53,9 +53,10 @@ console.log("axios.get")
         this.getData()
     }
   //delete movies
-  deleteMovie=(id)=> {
-    axios.delete(`http://localhost:3004/posts/${id}`)
+  deleteMovie=()=> {
+    axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/`,this.state.inpuut)
     .then(response => {
+
         console.log("response",response);
       })
     .catch(err=> 

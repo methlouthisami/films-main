@@ -19,8 +19,8 @@ function App() {
   // const ref=firebase.firestore().collection('movie')
   // console.log(ref)
   const getMovie = ()=>{
-    axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts').then(
-         (response) => {setMovie(response.data)
+    axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
+    .then((response) => {setMovie(Object.values(response.data))
   })
 }
 
@@ -50,12 +50,11 @@ const deleteMovie =(id)=>{
 
 
         <div className="App ">
+        <Navi handelchange={handelchange } favouriteMovie={favouriteMovie} />
         <div className="bag"> <img src="/landing.jpg" /> </div>
-        <Navi handelchange={handelchange} favouriteMovie={favouriteMovie} />
-
           <div className="box"><h2>watch your favorite movie for free in one place</h2><button className="button_one">Log in</button><button className="button_tow">Sign up</button></div>
          
-          <Route exact path="/"  ><Home getFavoris={getFavoris} movie={movie} favouriteMovie={favouriteMovie} getMovie={getMovie} deleteMovie={deleteMovie}/></Route>
+          <Route exact path="/"  ><Home getFavoris={getFavoris} movie={movie} favouriteMovie={favouriteMovie} getMovie={getMovie} deleteMovie={deleteMovie} handelchange={handelchange }/></Route>
 
           <Route path='/favories'><Favor favouriteMovie={favouriteMovie}  /></Route>
           <Route path='/admin'><PostForm/></Route>

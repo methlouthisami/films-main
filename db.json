@@ -24,7 +24,7 @@
         "Fantasy"
       ]
     },
-    {
+    { "id": 1,
       "title": "Tangled",
       "image": "http://api.androidhive.info/json/movies/8.jpg",
       "rating": 7.9,
@@ -35,7 +35,7 @@
         "Sci-Fi"
       ]
     },
-    {
+    {"id":2,
       "title": "Rush",
       "image": "http://api.androidhive.info/json/movies/9.jpg",
       "rating": 8.3,
@@ -46,7 +46,7 @@
         "Family"
       ]
     },
-    {
+    {"id":3,
       "title": "Drag Me to Hell",
       "image": "http://api.androidhive.info/json/movies/10.jpg",
       "rating": 6.7,
@@ -56,7 +56,7 @@
         "Thriller"
       ]
     },
-    {
+    {"id":4,
       "title": "Despicable Me 2",
       "image": "http://api.androidhive.info/json/movies/11.jpg",
       "rating": 7.6,
@@ -67,7 +67,7 @@
         "Family"
       ]
     },
-    {
+    {"id":5,
       "title": "Kill Bill: Vol. 1",
       "image": "http://api.androidhive.info/json/movies/12.jpg",
       "rating": 8.2,
@@ -77,7 +77,7 @@
         "Crime"
       ]
     },
-    {
+    {"id":6,
       "title": "A Bug's Life",
       "image": "http://api.androidhive.info/json/movies/13.jpg",
       "rating": 7.2,
@@ -88,7 +88,7 @@
         "Comedy"
       ]
     },
-    {
+    {"id":7,
       "title": "Life of Brian",
       "image": "http://api.androidhive.info/json/movies/14.jpg",
       "rating": 8.9,
@@ -97,7 +97,7 @@
         "Comedy"
       ]
     },
-    {
+    {"id":8,
       "title": "How to Train Your Dragon",
       "image": "http://api.androidhive.info/json/movies/15.jpg",
       "rating": 8.2,
@@ -108,7 +108,7 @@
         "Family"
       ]
     },
-    {
+    {"id":9,
       "title": "Tangled",
       "image": "http://api.androidhive.info/json/movies/8.jpg",
       "rating": 7.9,

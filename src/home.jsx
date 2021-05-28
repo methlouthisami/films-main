@@ -1,5 +1,4 @@
 import { React, useState } from 'react'
-import Navi from "./nav"
 import Movie from "./movie";
 
 const Home = ({ getFavoris, movie, favouriteMovie}) => {
@@ -7,9 +6,6 @@ const Home = ({ getFavoris, movie, favouriteMovie}) => {
     const handelchange = (e) => {
         setInput(e.target.value)
     }
-
-
-
     return (
         <div className="page_home">
 
@@ -18,7 +14,7 @@ const Home = ({ getFavoris, movie, favouriteMovie}) => {
 
             <div className="container">
                 <div className="row justify-content-center">
-                <Movie input={input} getFavoris={getFavoris} movie={movie} /></div>
+                <Movie input={input} getFavoris={getFavoris} movie={movie} handelchange={handelchange} /></div>
 
                 </div>
         </div>
