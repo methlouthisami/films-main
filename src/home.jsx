@@ -10,7 +10,7 @@ const Home = ({ getFavoris, movie, favouriteMovie}) => {
         <div className="page_home">
 
           
-            <input placeholder="rechercher" onChange={handelchange} />
+            <input placeholder="rechercher" onChange={handelchange} id="inpute-recherche"/>
 
             <div className="container">
                 <div className="row justify-content-center">

@@ -4,24 +4,18 @@ import { Card } from "react-bootstrap";
 
 function Movie({ input, getFavoris, movie}) {
 
+//   .filter((ro) => 
+
+//   ro.title.toString().toLowerCase().includes(input.toLowerCase())
+
+//  )
+  return (
+  movie.map((el) => 
 
 
-
-
-  return movie 
-    // .filter((ro) => {
-    //   if (input === "") {
-    //     return ro;
-    //   } else if (ro.title.toLowerCase().includes(input.toLowerCase())) {
-    //     return ro;
-    //   }
-    // })
-    .map((el) => (
-
-
-      <div>
-        <div className="cward  m-3">
-          <Card style={{ width: "15rem" }}>
+      <div className="">
+        <div className="col-md-4">
+          <Card style={{ width: "15rem" }} >
             <Card.Img variant="top" src={el.image} />
             <Card.Body>
               <Card.Title>{el.title}</Card.Title>
@@ -38,7 +32,8 @@ function Movie({ input, getFavoris, movie}) {
         </div>
       </div>
 
-    ));
+      ) 
+       )
 }
 
 export default Movie;

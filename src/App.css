@@ -55,7 +55,7 @@ background-repeat: no-repeat;
   box-shadow:0 5px 15px rgba(0,0, 0, .5);
     background:rgba(255, 255, 255, .2);
 }
-input{
+input #inpute-recherche{
   
     background-color: transparent;
     border:2px solid #c90f0f;
@@ -64,10 +64,10 @@ input{
     font-family: inherit;
     font-size: 1.2rem;
 }
-input::placeholder{
+input #inpute-recherche::placeholder{
     color:#ffff;
 }
- input:focus{
+ input #inpute-recherche:focus{
     border-radius: black;
 }
 

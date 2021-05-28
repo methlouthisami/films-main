@@ -1,0 +1,10 @@
+.admin_form h2{
+    color:white;
+    font-size: 15px;
+    margin-right: 180px;
+}
+#submit{
+    background-color: rgba(247, 31, 31, 0.973);
+    margin-top: 20px;
+    width:222px;
+}

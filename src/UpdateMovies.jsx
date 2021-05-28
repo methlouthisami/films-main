@@ -19,7 +19,7 @@ function UpdateMovies({el}) {
   });
 
   const  changeMovie = (e) => {
-    const  {name, value} = e.target;
+    const  {name, value} = e.target.value;
     
     setupdateMovie ({
         ...update,
@@ -53,9 +53,9 @@ function UpdateMovies({el}) {
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <div><input type="text" name="title" defaultValue={update.title} onChange={changeMovie} placeholder="title" /></div>
-          <div><input type="text" name="genre" defaultValue={update.genre} onChange={changeMovie} placeholder="genre"/></div>
-          <div><input type="text" name="rating" defaultValue={update.rating} onChange={changeMovie}placeholder="rating" /></div>
+          <div><input type="text" name="title" defaultValue={update.title} onChange={changeMovie} placeholder="ahlaaa" /></div>
+          <div><input type="text" name="genre" defaultValue={update.genre} onChange={changeMovie} placeholder="gwaaa"/></div>
+          <div><input type="text" name="rating" defaultValue={update.rating} onChange={changeMovie}placeholder="rasssss" /></div>
         
 
          

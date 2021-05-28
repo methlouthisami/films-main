@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import {Card} from 'react-bootstrap'
 import UpdateMovies from './UpdateMovies'
-
-
+import firebase from './firebase'
+import './admin.css'
 
  
 
@@ -12,7 +12,7 @@ class PostForm extends Component {
 
 
     state = {
-
+        image:'',
         title: '',
         rating: '',
         genre:'',
@@ -25,13 +25,16 @@ class PostForm extends Component {
 
 
 
-    changeHandler = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
-    }
+  
     submitHandler = e => {
         e.preventDefault()
-        console.log("hhhh", this.state)
-        axios.post(' https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json', this.state.inpuut)
+        const Data={
+            image:this.state.image,
+         title:this.state.title,
+            rating:this.state.rating,
+            genre:this.state.genre
+        }
+        axios.post('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json',Data)
             .then(response => {
                 console.log(response)
 
@@ -45,7 +48,7 @@ class PostForm extends Component {
         axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
             .then((response) => {
 console.log("axios.get")
-                this.setState({ inpuut: Object.values(response.data) })
+                this.setState({ inpuut: (response.data) })
             })
             .catch((err) => console.log('erreurrr', this.inpuut))
     }
@@ -53,15 +56,16 @@ console.log("axios.get")
         this.getData()
     }
   //delete movies
-  deleteMovie=()=> {
-    axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/`,this.state.inpuut)
-    .then(response => {
-
-        console.log("response",response);
+  deleteRow(id, e){
+    axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+  
+        const state = this.state.Data.filter(item => item.id !== id);
+        this.setState({ state });
       })
-    .catch(err=> 
-      console.log(err)
-    );
+  
   }
 
     //delete movies
@@ -69,32 +73,32 @@ console.log("axios.get")
         const { title, genre,rating } = this.state
         return (
             <div>
-                <form onSubmit={this.submitHandler} >
+                <form onSubmit={this.submitHandler} className="admin_form">
 
-                    <div><input type="text" name="title" value={this.title} onChange={this.changeHandler} placeholder="title" /></div>
-                    <div><input type="text" name="genre" value={this.genre} onChange={this.changeHandler} placeholder="genre"/></div>
-                    <div><input type="text" name="rating" value={this.rating} onChange={this.changeHandler}placeholder="rating" /></div>
+                    <div><h2>Title</h2><input type="text" name="title" value={this.title} onChange={(e)=>this.setState({title:e.target.value})}  /></div>
+                    <div><h2>Genre</h2><input type="text" name="genre" value={this.genre}onChange={(e)=>this.setState({genre:e.target.value})} /></div>
+                    <div><h2>Rating</h2><input type="text" name="rating" value={this.rating}onChange={(e)=>this.setState({rating:e.target.value})}/></div>
                   
 
                 </form>
-                <button type="submit" onClick={this.submitHandler}>submit</button>
+                <button type="submit" onClick={this.submitHandler} id="submit">submit</button>
 
                 <div className='d-flex justify-content-around flex-wrap'>
-                {this.state.inpuut.map(el => (
+                {Object.keys(this.state.inpuut).map(el => (
                     <div >       <Card style={{ width: "15rem" }} onSubmit={this.submitHandler}>
-                        <Card.Img variant="top" src={el.image} />
+                        <Card.Img variant="top" src={this.state.inpuut[el].image} />
                         <Card.Body>
-                            <Card.Title>{el.title}</Card.Title>
+                            <Card.Title>{this.state.inpuut[el].title}</Card.Title>
                             <Card.Text>
                                 <div className="mr-auto">
-                                    {el.rating}
+                                    {this.state.inpuut[el].genre}
                                     <img src="/favoris.png" className="favoris" />
                                 </div>
-                                <h6>{el.genre}/</h6>
+                                <h6>{this.state.inpuut[el].rating}</h6>
                             </Card.Text>
                         </Card.Body>
                     </Card>
-                        <button className="az"  onClick={() =>this.deleteMovie(el.id)}>remove</button> 
+                        <button className="az"  onClick={() => this.deleteRow(el)}>remove</button> 
                         <UpdateMovies el={el}/>
                          </div>
                        
