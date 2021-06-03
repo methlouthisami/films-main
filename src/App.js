@@ -9,25 +9,13 @@ import axios from "axios"
 import Navi from './nav'
 import { BrowserRouter, Route} from "react-router-dom";
 import About from './about'
-function App() {
+function App({movie,getMovie,handelchange}) {
 
-  const [favouriteMovie,handelchange, setfavouriteMovie] = useState([]);
+  const [favouriteMovie, setfavouriteMovie] = useState([]);
   
  
 // ********get movies function*************
-  const [movie, setMovie] = useState([]);
-  // const ref=firebase.firestore().collection('movie')
-  // console.log(ref)
-  const getMovie = ()=>{
-    axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
-    .then((response) => {setMovie(Object.values(response.data))
-  })
-}
 
-  useEffect(() => {
-    getMovie();
-
-  }, []);
 
 // *******************************
 
@@ -50,7 +38,7 @@ const deleteMovie =(id)=>{
 
 
         <div className="App ">
-        <Navi handelchange={handelchange } favouriteMovie={favouriteMovie} />
+        <Navi  favouriteMovie={favouriteMovie} />
         <div className="bag"> <img src="/landing.jpg" /> </div>
           <div className="box"><h2>watch your favorite movie for free in one place</h2><button className="button_one">Log in</button><button className="button_tow">Sign up</button></div>
          

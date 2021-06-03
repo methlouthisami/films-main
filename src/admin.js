@@ -11,21 +11,16 @@ import './admin.css'
 class PostForm extends Component {
 
 
-    state = {
-        image:'',
-        title: '',
-        rating: '',
-        genre:'',
+        state={
+            image:"",
+            title:"",
+               rating:"",
+               genre:""
+        ,
         inpuut: []
 
     }
-
-
-
-
-
-
-  
+    
     submitHandler = e => {
         e.preventDefault()
         const Data={
@@ -36,13 +31,21 @@ class PostForm extends Component {
         }
         axios.post('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json',Data)
             .then(response => {
-                console.log(response)
+                console.log(response)})
+            .then(ref=>this.refrech())
+            }
+                
+            
 
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+
+
+
+     refrech=()=>{
+      window.location.reload()
+         }
+                    
+  
+ 
 
     getData = () => {
         axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
@@ -50,6 +53,7 @@ class PostForm extends Component {
 console.log("axios.get")
                 this.setState({ inpuut: (response.data) })
             })
+           
             .catch((err) => console.log('erreurrr', this.inpuut))
     }
     componentDidMount() {
@@ -65,19 +69,22 @@ console.log("axios.get")
         const state = this.state.Data.filter(item => item.id !== id);
         this.setState({ state });
       })
+      .then(res=>this.refrech())
   
   }
 
     //delete movies
   render() {
-        const { title, genre,rating } = this.state
+     
+    const { title, genre,rating } = this.state
         return (
             <div>
                 <form onSubmit={this.submitHandler} className="admin_form">
 
-                    <div><h2>Title</h2><input type="text" name="title" value={this.title} onChange={(e)=>this.setState({title:e.target.value})}  /></div>
-                    <div><h2>Genre</h2><input type="text" name="genre" value={this.genre}onChange={(e)=>this.setState({genre:e.target.value})} /></div>
-                    <div><h2>Rating</h2><input type="text" name="rating" value={this.rating}onChange={(e)=>this.setState({rating:e.target.value})}/></div>
+                    <div><h2>Title</h2><input type="text" name="title" value={this.title}  
+                    onChange={(e)=>this.setState({title:e.target.value})}/></div>
+                    <div><h2>Genre</h2><input type="text" name="genre" value={this.genre} onChange={(e)=>this.setState({genre:e.target.value})} /></div>
+                    <div><h2>Rating</h2><input type="text" name="rating" value={this.rating} onChange={(e)=>this.setState({rating:e.target.value})}/></div>
                   
 
                 </form>
@@ -99,7 +106,7 @@ console.log("axios.get")
                         </Card.Body>
                     </Card>
                         <button className="az"  onClick={() => this.deleteRow(el)}>remove</button> 
-                        <UpdateMovies el={el}/>
+                        <UpdateMovies inpuut={this.state.inpuut} el={el}/>
                          </div>
                        
 
