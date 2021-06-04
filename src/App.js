@@ -1,7 +1,7 @@
 import "./App.css"
 
 import Foote from "./footer";
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import Favor from './favories'
 import Home from "./home"
 import PostForm from './admin'
@@ -14,15 +14,19 @@ function App({movie,getMovie,handelchange}) {
   const [favouriteMovie, setfavouriteMovie] = useState([]);
   
  
-// ********get movies function*************
+// ********get favorite function*************
 
+const getFavoris = (el) => {
+ 
+  
+    favouriteMovie.push(el)
+    console.log('hhhhhhhhhhhhhh',favouriteMovie)
+  
+
+}
 
 // *******************************
 
-  const getFavoris = (el) => {
-    favouriteMovie.push(el)
-    console.log(favouriteMovie)
-  }
 const deleteMovie =(id)=>{
   axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/.posts.json/${id}`)
   .then((response)=>console.log("deletttttte",response))

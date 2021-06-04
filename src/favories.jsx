@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 
 
 const Mybest = ({ favouriteMovie, Remove ,handleRemoveItem,deleteMovie}) => {
+  
 
   return (
     <div>

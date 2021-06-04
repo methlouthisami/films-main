@@ -20,7 +20,9 @@ class PostForm extends Component {
         inpuut: []
 
     }
-    
+    refrech=()=>{
+        window.location.reload()
+           }  
     submitHandler = e => {
         e.preventDefault()
         const Data={
@@ -34,18 +36,6 @@ class PostForm extends Component {
                 console.log(response)})
             .then(ref=>this.refrech())
             }
-                
-            
-
-
-
-
-     refrech=()=>{
-      window.location.reload()
-         }
-                    
-  
- 
 
     getData = () => {
         axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
