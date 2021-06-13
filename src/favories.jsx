@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 
 
 const Mybest = ({ favouriteMovie, Remove ,handleRemoveItem,deleteMovie}) => {
-  
+
 
   return (
     <div>
@@ -17,8 +17,8 @@ const Mybest = ({ favouriteMovie, Remove ,handleRemoveItem,deleteMovie}) => {
               <Card.Text>
                 <div className="mr-auto">
                   {el.rating}
-                  <img src="/favoris.png" className="favoris" />
-                  <button onClick={deleteMovie} ><img src="/bouton.png" style={{ width: "20px" }} /></button> 
+                  <img alt="" src="/favoris.png" className="favoris" />
+                  <button onClick={deleteMovie} ><img alt="" src="/bouton.png" style={{ width: "20px" }} /></button>
                 </div>
                 <h6>{el.genre}/</h6>
               </Card.Text>

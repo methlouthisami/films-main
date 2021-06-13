@@ -1,109 +1,125 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import {Card} from 'react-bootstrap'
-import UpdateMovies from './UpdateMovies'
-import firebase from './firebase'
-import './admin.css'
+import React, {useEffect, useState} from "react";
+import axios from "axios";
+import {Button, Card} from "react-bootstrap";
 
- 
+import UpdateMovies from "./UpdateMovies";
+import "./admin.css";
 
+const image = "https://picsum.photos/seed/picsum/600/600";
 
-class PostForm extends Component {
+const MovieCard = ({id, movie, deleteMovie, fetchMovies }) => {
+    const [ modalOpen, setModalOpen ] = useState(false);
+    const { title, image, genre, rating } = movie;
 
+    return(
+        <>
+            <Card style={{ width: "15rem" }}>
+                <Card.Img variant="top" src={image} />
+                <Card.Body>
+                    <Card.Title>{ title }</Card.Title>
+                    <Card.Text>
+                        <div className="mr-auto">
+                            {genre}
+                            <img src="/favoris.png" className="favoris" alt="" />
+                        </div>
+                        <h6>{rating}</h6>
+                    </Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                    <Button
+                        style={{ marginRight: 10 }}
+                        variant="danger"
+                        onClick={() => deleteMovie(id)}
+                    >
+                        Remove
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={ () => setModalOpen(true) }
+                    >
+                        Edit
+                    </Button>
+                </Card.Footer>
+            </Card>
+            <UpdateMovies
+                open={ modalOpen }
+                close={ () => setModalOpen(false) }
+                id={ id }
+                movie={ movie }
+                fetchMovies={fetchMovies}
+            />
+        </>
+    );
+};
 
-        state={
-            image:"",
-            title:"",
-               rating:"",
-               genre:""
-        ,
-        inpuut: []
-
+const AddNewMovie = () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+         const body = {
+             image,
+             title: e.target.elements.title.value,
+             genre: [ e.target.elements.genre.value ],
+             rating: e.target.elements.rating.value,
+         }
+        await axios.post("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json", body)
+            .catch(e => console.log("Error", e));
     }
-    refrech=()=>{
-        window.location.reload()
-           }  
-    submitHandler = e => {
-        e.preventDefault()
-        const Data={
-            image:this.state.image,
-         title:this.state.title,
-            rating:this.state.rating,
-            genre:this.state.genre
-        }
-        axios.post('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json',Data)
-            .then(response => {
-                console.log(response)})
-            .then(ref=>this.refrech())
-            }
 
-    getData = () => {
-        axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
-            .then((response) => {
-console.log("axios.get")
-                this.setState({ inpuut: (response.data) })
-            })
-           
-            .catch((err) => console.log('erreurrr', this.inpuut))
-    }
-    componentDidMount() {
-        this.getData()
-    }
-  //delete movies
-  deleteRow(id, e){
-    axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`)
-      .then(res => {
-        console.log(res);
-        console.log(res.data);
-  
-        const state = this.state.Data.filter(item => item.id !== id);
-        this.setState({ state });
-      })
-      .then(res=>this.refrech())
-  
-  }
-
-    //delete movies
-  render() {
-     
-    const { title, genre,rating } = this.state
-        return (
+    return(
+        <form onSubmit={handleSubmit} className="admin_form">
             <div>
-                <form onSubmit={this.submitHandler} className="admin_form">
-
-                    <div><h2>Title</h2><input type="text" name="title" value={this.title}  
-                    onChange={(e)=>this.setState({title:e.target.value})}/></div>
-                    <div><h2>Genre</h2><input type="text" name="genre" value={this.genre} onChange={(e)=>this.setState({genre:e.target.value})} /></div>
-                    <div><h2>Rating</h2><input type="text" name="rating" value={this.rating} onChange={(e)=>this.setState({rating:e.target.value})}/></div>
-                  
-
-                </form>
-                <button type="submit" onClick={this.submitHandler} id="submit">submit</button>
-
-                <div className='d-flex justify-content-around flex-wrap'>
-                {Object.keys(this.state.inpuut).map(el => (
-                    <div >       <Card style={{ width: "15rem" }} onSubmit={this.submitHandler}>
-                        <Card.Img variant="top" src={this.state.inpuut[el].image} />
-                        <Card.Body>
-                            <Card.Title>{this.state.inpuut[el].title}</Card.Title>
-                            <Card.Text>
-                                <div className="mr-auto">
-                                    {this.state.inpuut[el].genre}
-                                    <img src="/favoris.png" className="favoris" />
-                                </div>
-                                <h6>{this.state.inpuut[el].rating}</h6>
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                        <button className="az"  onClick={() => this.deleteRow(el)}>remove</button> 
-                        <UpdateMovies inpuut={this.state.inpuut} el={el}/>
-                         </div>
-                       
-
-                ))}
-                </div>
+                <h2>Title</h2>
+                <input type="text" name="title" />
             </div>
-        )
-    }
+            <div>
+                <h2>Genre</h2>
+                <input type="text" name="genre"/>
+            </div>
+            <div>
+                <h2>Rating</h2>
+                <input type="text" name="rating" />
+            </div>
+            <button type="submit" id="submit">
+                submit
+            </button>
+        </form>
+    );
 }
-export default PostForm;                   
+
+const Admin = () => {
+
+    const [ movies, setMovies ] = useState([]);
+
+    const fetchMovies = () => axios.get("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json")
+        .then(({data}) => setMovies(data))
+        .catch( err => console.log("erreurrr", err));
+
+    //eslint-disable-next-line
+    useEffect(() => fetchMovies(), []);
+
+    const deleteMovie = id => {
+        axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`)
+            .then( fetchMovies )
+            .catch( e => console.log("Delete Error", e) );
+    }
+
+    return(
+        <div>
+            <AddNewMovie />
+            <div className="d-flex justify-content-around flex-wrap">
+                { Object.keys(movies).map( id => id && (
+                    <div key={id}>
+                        <MovieCard
+                            id={id}
+                            movie={movies[id]}
+                            deleteMovie={deleteMovie}
+                            fetchMovies={fetchMovies}
+                        />
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default Admin;
