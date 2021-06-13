@@ -52,9 +52,16 @@ const MovieCard = ({id, movie, deleteMovie, fetchMovies }) => {
     );
 };
 
-const AddNewMovie = () => {
+const AddNewMovie = ({fetchMovies}) => {
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const resetForm = e => {
+            e.target.elements.title.value = "";
+            e.target.elements.genre.value  = "";
+            e.target.elements.rating.value = "";
+        }
+
          const body = {
              image,
              title: e.target.elements.title.value,
@@ -62,6 +69,8 @@ const AddNewMovie = () => {
              rating: e.target.elements.rating.value,
          }
         await axios.post("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json", body)
+            .then(fetchMovies)
+            .then((resetForm) )
             .catch(e => console.log("Error", e));
     }
 
@@ -105,7 +114,7 @@ const Admin = () => {
 
     return(
         <div>
-            <AddNewMovie />
+            <AddNewMovie fetchMovies={fetchMovies} />
             <div className="d-flex justify-content-around flex-wrap">
                 { Object.keys(movies).map( id => id && (
                     <div key={id}>
