@@ -7,7 +7,7 @@ import "./admin.css";
 
 const image = "https://picsum.photos/seed/picsum/600/600";
 
-const MovieCard = ({id, movie, deleteMovie, fetchMovies }) => {
+const MovieCard = ({id, movie = {}, deleteMovie, fetchMovies }) => {
     const [ modalOpen, setModalOpen ] = useState(false);
     const { title, image, genre, rating } = movie;
 
@@ -17,13 +17,11 @@ const MovieCard = ({id, movie, deleteMovie, fetchMovies }) => {
                 <Card.Img variant="top" src={image} />
                 <Card.Body>
                     <Card.Title>{ title }</Card.Title>
-                    <Card.Text>
                         <div className="mr-auto">
                             {genre}
                             <img src="/favoris.png" className="favoris" alt="" />
                         </div>
                         <h6>{rating}</h6>
-                    </Card.Text>
                 </Card.Body>
                 <Card.Footer>
                     <Button
@@ -56,7 +54,7 @@ const AddNewMovie = ({fetchMovies}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const resetForm = e => {
+        const resetForm = () => {
             e.target.elements.title.value = "";
             e.target.elements.genre.value  = "";
             e.target.elements.rating.value = "";
@@ -70,7 +68,7 @@ const AddNewMovie = ({fetchMovies}) => {
          }
         await axios.post("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json", body)
             .then(fetchMovies)
-            .then((resetForm) )
+            .then(resetForm)
             .catch(e => console.log("Error", e));
     }
 
@@ -100,13 +98,20 @@ const Admin = () => {
     const [ movies, setMovies ] = useState([]);
 
     const fetchMovies = () => axios.get("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json")
-        .then(({data}) => setMovies(data))
+        .then(({data}) => {
+            const moviesList = [];
+            for( let id in data){
+                moviesList.push({...data[id], id });
+            }
+            setMovies([...movies, ...moviesList])
+        })
         .catch( err => console.log("erreurrr", err));
 
     //eslint-disable-next-line
     useEffect(() => fetchMovies(), []);
 
     const deleteMovie = id => {
+        console.log({id})
         axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`)
             .then( fetchMovies )
             .catch( e => console.log("Delete Error", e) );
@@ -116,11 +121,11 @@ const Admin = () => {
         <div>
             <AddNewMovie fetchMovies={fetchMovies} />
             <div className="d-flex justify-content-around flex-wrap">
-                { Object.keys(movies).map( id => id && (
-                    <div key={id}>
+                { movies.map( movie => movie && (
+                    <div key={movie.id}>
                         <MovieCard
-                            id={id}
-                            movie={movies[id]}
+                            id={movie.id}
+                            movie={movie}
                             deleteMovie={deleteMovie}
                             fetchMovies={fetchMovies}
                         />
@@ -128,7 +133,7 @@ const Admin = () => {
                 ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default Admin;

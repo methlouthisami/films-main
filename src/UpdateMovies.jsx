@@ -8,19 +8,23 @@ function UpdateMovies({ movie, id, open, close, fetchMovies }) {
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
     const [rating, setRating] = useState("");
+    const [image, setImage] = useState("");
 
     useEffect(() => {
         setTitle( movie.title );
         setGenre( movie.genre );
         setRating( movie.rating );
+        setImage( movie.image );
+
     }, [movie]);
 
     const handleMovieUpdate = (e) => {
         e.preventDefault();
         axios.put(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`, {
             title,
-            genre: genre.split(','),
+            genre,
             rating,
+            image
         })
             .then( close )
             .then( fetchMovies )
@@ -48,8 +52,8 @@ function UpdateMovies({ movie, id, open, close, fetchMovies }) {
                             <input
                                 type="text"
                                 name="genre"
-                                defaultValue={genre}
-                                onChange={({ target:{ value }}) => setGenre(value)}
+                                defaultValue={ genre.join ? genre.join() : genre }
+                                onChange={({ target:{ value }}) => setGenre(value.split())}
                                 placeholder="Genre"
                             />
                         </div>
