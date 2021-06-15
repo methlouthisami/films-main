@@ -12,7 +12,7 @@ import Navi from './nav';
 import About from './about';
 
 import {deleteMovies, getMovies, updateMovies, createMovie} from "./core/movies";
-import movie from "./movie";
+//import movie from "./movie";
 
 function App() {
     const [movies, setMovies] = useState([]);
