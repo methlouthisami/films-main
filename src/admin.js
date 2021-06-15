@@ -103,7 +103,7 @@ const Admin = () => {
             for( let id in data){
                 moviesList.push({...data[id], id });
             }
-            setMovies([...movies, ...moviesList])
+            setMovies(moviesList)
         })
         .catch( err => console.log("erreurrr", err));
 
