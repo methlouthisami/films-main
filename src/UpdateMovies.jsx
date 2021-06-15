@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import { Modal,Button } from 'react-bootstrap';
 import './update.css';
 
-function UpdateMovies({ movie, id, open, close, fetchMovies }) {
+function UpdateMovies({ movie, id, open, close, handleUpdateMovie }) {
 
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
@@ -20,14 +19,14 @@ function UpdateMovies({ movie, id, open, close, fetchMovies }) {
 
     const handleMovieUpdate = (e) => {
         e.preventDefault();
-        axios.put(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`, {
+        handleUpdateMovie(id, {
+            id,
             title,
             genre,
             rating,
             image
         })
             .then( close )
-            .then( fetchMovies )
             .catch( err => console.log("Update Error.", err));
     }
 
@@ -53,7 +52,7 @@ function UpdateMovies({ movie, id, open, close, fetchMovies }) {
                                 type="text"
                                 name="genre"
                                 defaultValue={ genre.join ? genre.join() : genre }
-                                onChange={({ target:{ value }}) => setGenre(value.split())}
+                                onChange={({ target:{ value }}) => setGenre( value.split() )}
                                 placeholder="Genre"
                             />
                         </div>

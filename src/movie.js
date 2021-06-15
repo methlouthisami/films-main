@@ -1,44 +1,26 @@
-import React, { useEffect, useState } from "react";
-import axios from 'axios'
-import { Card } from "react-bootstrap";
-
+import {Card} from "react-bootstrap";
 import "./movie.css";
 
+const MovieComponent = ({ movie:{ id, image, title, rating, genre }, addFavorite }) => (
+    <div className="col-md-4">
+        <Card style={{ width: "15rem" }} >
+            <Card.Img variant="top" src={image} />
+            <Card.Body>
+                <Card.Title>{title}</Card.Title>
+                <span className="mr-auto">
+                    {rating}
+                    <img src="/favoris.png" className="favoris" alt="" />
+                </span>
+                <h6>{genre}/</h6>
+                <button
+                    onClick={() => addFavorite(id) }
+                    className="fav_button"
+                >
+                    favourite
+                </button>
+            </Card.Body>
+        </Card>
+    </div>
+);
 
-function Movie({getFavoris}) {
-    const [movie, setMovie] = useState([]);
-
-    const getData = () => {
-        axios.get('https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json')
-            .then(({data}) => setMovie(data))
-            .catch((err) => console.log('erreurrr',err));
-    }
-
-    useEffect(() => getData() ,[]);
-
-    return movie.map( (el ) => el && (
-        <div className="col-md-4">
-            <Card style={{ width: "15rem" }} >
-                <Card.Img variant="top" src={el.image} />
-                <Card.Body>
-                    <Card.Title>{el.title}</Card.Title>
-                    <Card.Text>
-                        <div className="mr-auto">
-                            {el.rating}
-                            <img src="/favoris.png" className="favoris" alt="" />
-                        </div>
-                        <h6>{el.genre}/</h6>
-                    </Card.Text>
-                    <button
-                        onClick={ () => { getFavoris(el) }}
-                        className="fav_button"
-                    >
-                        favourite
-                    </button>
-                </Card.Body>
-            </Card>
-        </div>
-    ));
-}
-
-export default Movie;
+export default MovieComponent;

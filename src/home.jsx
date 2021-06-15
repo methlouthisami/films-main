@@ -1,24 +1,27 @@
-import { React, useState } from 'react'
+import {useEffect} from "react";
 import Movie from "./movie";
 
-const Home = ({ getFavoris, movie, favouriteMovie}) => {
-    const [input, setInput] = useState("")
-    const handelchange = (e) => {
-        setInput(e.target.value)
-    }
+const Home = ({ movies, addFavorite, getMovies }) => {
+
+    //eslint-disable-next-line
+    useEffect(() => getMovies(), []);
+
     return (
         <div className="page_home">
-
-          
-            <input placeholder="rechercher" onChange={handelchange} id="inpute-recherche"/>
-
+            <input placeholder="rechercher" onChange={() => console.log("changing")} id="inpute-recherche" />
             <div className="container">
                 <div className="row justify-content-center">
-                <Movie input={input} getFavoris={getFavoris} movie={movie} handelchange={handelchange} /></div>
-
+                    { movies.map( movie => (
+                        <Movie
+                            key={movie.id}
+                            movie={movie}
+                            addFavorite={addFavorite}
+                        />
+                    ))}
                 </div>
+            </div>
         </div>
-    )
+    );
 }
 
-export default Home
+export default Home;
