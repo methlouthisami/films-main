@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import {Button, Card} from "react-bootstrap";
 
 import UpdateMovies from "./UpdateMovies";
@@ -7,7 +6,7 @@ import "./admin.css";
 
 const image = "https://picsum.photos/seed/picsum/600/600";
 
-const MovieCard = ({id, movie = {}, deleteMovie, fetchMovies }) => {
+const MovieCard = ({id, movie = {}, deleteMovie, handleUpdateMovie }) => {
     const [ modalOpen, setModalOpen ] = useState(false);
     const { title, image, genre, rating } = movie;
 
@@ -44,36 +43,27 @@ const MovieCard = ({id, movie = {}, deleteMovie, fetchMovies }) => {
                 close={ () => setModalOpen(false) }
                 id={ id }
                 movie={ movie }
-                fetchMovies={fetchMovies}
+                handleUpdateMovie={handleUpdateMovie}
             />
         </>
     );
 };
 
-const AddNewMovie = ({fetchMovies}) => {
+const AddNewMovie = ({createMovie}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const resetForm = () => {
-            e.target.elements.title.value = "";
-            e.target.elements.genre.value  = "";
-            e.target.elements.rating.value = "";
-        }
-
-         const body = {
-             image,
-             title: e.target.elements.title.value,
-             genre: [ e.target.elements.genre.value ],
-             rating: e.target.elements.rating.value,
-         }
-        await axios.post("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json", body)
-            .then(fetchMovies)
-            .then(resetForm)
-            .catch(e => console.log("Error", e));
+        await createMovie({
+            image,
+            title: e.target.elements.title.value,
+            genre: [ e.target.elements.genre.value ],
+            rating: e.target.elements.rating.value,
+        });
+        document.getElementById("add-movie-form").reset();
     }
 
     return(
-        <form onSubmit={handleSubmit} className="admin_form">
+        <form onSubmit={handleSubmit} id="add-movie-form" className="admin_form">
             <div>
                 <h2>Title</h2>
                 <input type="text" name="title" />
@@ -93,33 +83,15 @@ const AddNewMovie = ({fetchMovies}) => {
     );
 }
 
-const Admin = () => {
-
-    const [ movies, setMovies ] = useState([]);
-
-    const fetchMovies = () => axios.get("https://aflem-6e85d-default-rtdb.firebaseio.com/posts.json")
-        .then(({data}) => {
-            const moviesList = [];
-            for( let id in data){
-                moviesList.push({...data[id], id });
-            }
-            setMovies(moviesList)
-        })
-        .catch( err => console.log("erreurrr", err));
-
+const Admin = ({ movies, getMovies, deleteMovie, updateMovie, createMovie }) => {
     //eslint-disable-next-line
-    useEffect(() => fetchMovies(), []);
-
-    const deleteMovie = id => {
-        console.log({id})
-        axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/posts/${id}.json`)
-            .then( fetchMovies )
-            .catch( e => console.log("Delete Error", e) );
-    }
-
+    useEffect(() => getMovies(), []);
     return(
         <div>
-            <AddNewMovie fetchMovies={fetchMovies} />
+            <AddNewMovie
+                fetchMovies={getMovies}
+                createMovie={createMovie}
+            />
             <div className="d-flex justify-content-around flex-wrap">
                 { movies.map( movie => movie && (
                     <div key={movie.id}>
@@ -127,7 +99,7 @@ const Admin = () => {
                             id={movie.id}
                             movie={movie}
                             deleteMovie={deleteMovie}
-                            fetchMovies={fetchMovies}
+                            handleUpdateMovie={updateMovie}
                         />
                     </div>
                 ))}

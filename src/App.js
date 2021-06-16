@@ -1,40 +1,49 @@
 import "./App.css"
 
 import React, { useState } from "react";
-import axios from "axios"
 import { BrowserRouter, Route } from "react-router-dom";
+
+import AdminPage from './admin';
+import HomePage from "./home";
+
 import Foote from "./footer";
 import Favor from './favories'
-import Home from "./home"
-import PostForm from './admin'
-import Navi from './nav'
-import About from './about'
+import Navi from './nav';
+import About from './about';
 
-function App({movie,getMovie,handelchange}) {
+import {deleteMovies, getMovies, updateMovies, createMovie} from "./core/movies";
+//import movie from "./movie";
 
-  const [favouriteMovie] = useState([]);
+function App() {
+    const [movies, setMovies] = useState([]);
+    const [favorites, setFavorites ] = useState([]);
 
+    const handleGetMovies = async () => setMovies( await getMovies() );
 
-// ********get favorite function*************
+    const handleDeleteMovie = async id => {
+        await deleteMovies(id);
+        setMovies( movies.filter( movie => movie.id !== id))
+    }
 
-const getFavoris = (el) => {
-    favouriteMovie.push(el);
-    console.log('hhhhhhhhhhhhhh',favouriteMovie)
-}
+    const handleUpdateMovie = async (id, body) => {
+        await updateMovies(id, body);
+        setMovies( movies.map( movie => movie.id === id ?  {...movie, ...body } : movie ));
+    }
 
-// *******************************
+    const handleNewMovie = async movie => {
+        const {data:{name }}= await createMovie(movie);
+        setMovies([...movies, {id: name,...movie}]);
+    }
 
-const deleteMovie = (id) => {
-  axios.delete(`https://aflem-6e85d-default-rtdb.firebaseio.com/.posts.json/${id}`)
-  .then((response)=> console.log("deletttttte",response))
-  .catch((err)=>console.log("4altaaaa",err))
-}
+    const isFavoriteExists = id => ( favorites.filter(movie => id === movie.id ) ).length;
+    const handleAddFavorite = id => !isFavoriteExists(id) && setFavorites([...favorites, ...movies.filter( movie => id === movie.id )]);
+    const handleDeleteFavorite = id => setFavorites(favorites.filter( movie => movie.id !== id ));
 
     return (
         <div>
             <BrowserRouter>
-                <div className="App ">
-                    <Navi  favouriteMovie={favouriteMovie} />
+                <div className="App">
+                    <Navi />
                     <div className="bag">
                         <img src="/landing.jpg" alt=""/>
                     </div>
@@ -45,22 +54,31 @@ const deleteMovie = (id) => {
                     </div>
 
                     <Route exact path="/">
-                        <Home
-                            getFavoris={getFavoris}
-                            movie={movie}
-                            favouriteMovie={favouriteMovie}
-                            getMovie={getMovie}
-                            deleteMovie={deleteMovie}
-                            handelchange={handelchange }
-                        />
+                         <HomePage
+                             movies={movies}
+                             getMovies={handleGetMovies}
+                             addFavorite={handleAddFavorite}
+                         />
                     </Route>
 
                     <Route path='/favories'>
-                        <Favor favouriteMovie={favouriteMovie}  />
+                        <Favor
+                            favouriteMovie={favorites}
+                            deleteFavorite={handleDeleteFavorite}
+                        />
                     </Route>
+
                     <Route path='/admin'>
-                        <PostForm/>
+                        <AdminPage
+                            movies={ movies }
+                            getMovies={handleGetMovies}
+                            deleteMovie={handleDeleteMovie}
+                            updateMovie={handleUpdateMovie}
+                            createMovie={handleNewMovie}
+                            addFavorite={handleAddFavorite}
+                        />
                     </Route>
+
                     <Route path='/about'>
                         <About/>
                     </Route>

@@ -2,14 +2,14 @@ import React from 'react'
 import { Card } from "react-bootstrap";
 
 
-const Mybest = ({ favouriteMovie, Remove ,handleRemoveItem,deleteMovie}) => {
+const Mybest = ({ favouriteMovie, deleteFavorite }) => {
 
 
   return (
     <div>
 
       {favouriteMovie.map((el) => (
-       <div className="d-flex flex-wrap justify-content-between">
+       <div key={el.id} className="d-flex flex-wrap justify-content-between">
           <Card style={{ width: "15rem" }}>
             <Card.Img variant="top" src={el.image} />
             <Card.Body>
@@ -18,7 +18,7 @@ const Mybest = ({ favouriteMovie, Remove ,handleRemoveItem,deleteMovie}) => {
                 <div className="mr-auto">
                   {el.rating}
                   <img alt="" src="/favoris.png" className="favoris" />
-                  <button onClick={deleteMovie} ><img alt="" src="/bouton.png" style={{ width: "20px" }} /></button>
+                  <button onClick={e => deleteFavorite(el.id)} ><img alt="" src="/bouton.png" style={{ width: "20px" }} /></button>
                 </div>
                 <h6>{el.genre}/</h6>
               </Card.Text>
