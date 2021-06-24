@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion, Card, Button } from "react-bootstrap";
-import "./about.css";
+
 function About() {
   return (
     <div className="accor">

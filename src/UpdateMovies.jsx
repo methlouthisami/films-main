@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import { Modal,Button } from 'react-bootstrap';
-import './update.css';
 
-function UpdateMovies({ movie, id, open, close, handleUpdateMovie }) {
+function UpdateMovies({ movie, open, close, handleUpdateMovie }) {
 
+    const {id} = movie;
     const [title, setTitle] = useState("");
     const [genre, setGenre] = useState("");
     const [rating, setRating] = useState("");

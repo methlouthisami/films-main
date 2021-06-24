@@ -1,42 +1,58 @@
-import {useEffect, useState} from "react";
-import Movie from "./movie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const Home = ({ movies, addFavorite, getMovies }) => {
+import { addFavorite } from "./actions";
 
-    const [currentMovies, setCurrentMovies] = useState([]);
+import Movie from "./components/_movie.card";
 
-    const handleSearch = ({ target: {value} }) => {
-        if(value.length >= 2){
-            setCurrentMovies( movies.filter( movie => {
-                const m = new RegExp(value, "i");
-                return m.test( movie.title);
-            }))
-        }else setCurrentMovies([]);
-    }
+const MoviesList = ({ movies, addFavorite }) => (
+  <div className="row justify-content-center">
+    {movies.map((movie) => (
+      <Movie key={movie.id} movie={movie} addFavorite={addFavorite} />
+    ))}
+  </div>
+);
 
-    //eslint-disable-next-line
-    useEffect(() => getMovies(), []);
+const Home = () => {
 
-    return (
-        <div className="page_home">
-            <input
-                placeholder="rechercher"
-                onChange={ handleSearch }
-                id="inpute-recherche"
-            />
-            <div className="container">
-                <div className="row justify-content-center">
-                    { (currentMovies.length > 0 ? currentMovies : movies).map( movie => (
-                        <Movie
-                            key={movie.id}
-                            movie={movie}
-                            addFavorite={addFavorite}
-                        />
-                    ))}
-                </div>
-            </div>
-        </div>
+  const dispatch = useDispatch();
+  const movies = useSelector((store) => store.movies);
+
+  const [moviesList, setMoviesList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleAddFavorite = (id) => dispatch(addFavorite(id));
+
+  const handleNewSearch = () => {
+    setMoviesList(
+      movies.filter((movie) => {
+        const m = new RegExp(searchTerm.trim(), "i");
+        return m.test(movie.title);
+      })
     );
-}
+  };
+
+  //eslint-disable-next-line
+  useEffect(handleNewSearch, [searchTerm, movies]);
+
+  return (
+    <div style={{ minWidth: "100%" }}>
+      <div className="page_home">
+        <input
+          placeholder="rechercher"
+          onChange={ ({ target: { value }}) => setSearchTerm(value) }
+          id="inpute-recherche"
+        />
+      </div>
+
+      <div className="container">
+        <MoviesList
+          movies={moviesList}
+          addFavorite={handleAddFavorite}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default Home;

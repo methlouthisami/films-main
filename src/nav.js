@@ -1,16 +1,15 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 
-import './nav.css';
-import './favories';
+import Logo from "./images/logo.jpg";
 
-const Navi = ({  favouriteMovie }) => {
+const Navi = () => {
   return (
     <div className="naav col-md-12">
         <nav>
             <ul>
                 <li className="left_side col-md-4">
-                   <img className="img-logo" src="/logo.jpg" alt="" />
+                   <img className="img-logo" src={Logo} alt="" />
                 </li>
               <div className="right_side col-md-6">
                   <ul>

@@ -1,7 +1,8 @@
-import "./App.css"
-
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { setMovies } from "./actions";
 
 import AdminPage from './admin';
 import HomePage from "./home";
@@ -12,32 +13,33 @@ import Navi from './nav';
 import About from './about';
 
 import {deleteMovies, getMovies, updateMovies, createMovie} from "./core/movies";
-//import movie from "./movie";
 
 function App() {
-    const [movies, setMovies] = useState([]);
-    const [favorites, setFavorites ] = useState([]);
+    const dispatch = useDispatch();
 
-    const handleGetMovies = async () => setMovies( await getMovies() );
+    useEffect(() => {
+        getMovies()
+            .then( movies => dispatch( setMovies( movies ) ));
+    }, []);
 
     const handleDeleteMovie = async id => {
         await deleteMovies(id);
-        setMovies( movies.filter( movie => movie.id !== id))
+        //setMovies( movies.filter( movie => movie.id !== id))
     }
 
     const handleUpdateMovie = async (id, body) => {
         await updateMovies(id, body);
-        setMovies( movies.map( movie => movie.id === id ?  {...movie, ...body } : movie ));
+        //setMovies( movies.map( movie => movie.id === id ?  {...movie, ...body } : movie ));
     }
 
     const handleNewMovie = async movie => {
         const {data:{name }}= await createMovie(movie);
-        setMovies([...movies, {id: name,...movie}]);
+        //setMovies([...movies, {id: name,...movie}]);
     }
 
-    const isFavoriteExists = id => ( favorites.filter(movie => id === movie.id ) ).length;
-    const handleAddFavorite = id => !isFavoriteExists(id) && setFavorites([...favorites, ...movies.filter( movie => id === movie.id )]);
-    const handleDeleteFavorite = id => setFavorites(favorites.filter( movie => movie.id !== id ));
+    //const isFavoriteExists = id => ( favorites.filter(movie => id === movie.id ) ).length;
+    //const handleAddFavorite = id => !isFavoriteExists(id) && setFavorites([...favorites, ...movies.filter( movie => id === movie.id )]);
+    //const handleDeleteFavorite = id => setFavorites(favorites.filter( movie => movie.id !== id ));
 
     return (
         <div>
@@ -54,29 +56,15 @@ function App() {
                     </div>
 
                     <Route exact path="/">
-                         <HomePage
-                             movies={movies}
-                             getMovies={handleGetMovies}
-                             addFavorite={handleAddFavorite}
-                         />
+                         <HomePage />
                     </Route>
 
                     <Route path='/favories'>
-                        <Favor
-                            favouriteMovie={favorites}
-                            deleteFavorite={handleDeleteFavorite}
-                        />
+                        <Favor />
                     </Route>
 
                     <Route path='/admin'>
-                        <AdminPage
-                            movies={ movies }
-                            getMovies={handleGetMovies}
-                            deleteMovie={handleDeleteMovie}
-                            updateMovie={handleUpdateMovie}
-                            createMovie={handleNewMovie}
-                            addFavorite={handleAddFavorite}
-                        />
+                        <AdminPage />
                     </Route>
 
                     <Route path='/about'>
